@@ -1,6 +1,8 @@
 #!/bin/sh
 
 in="$(echo $* | awk -F "." '{print $1}')"
+if [[ $in =~ ^[a-zA-Z]+$ ]]
+then
 
 waktu="$( date +"%H" )"
 
@@ -19,4 +21,5 @@ printf $random $'\n' >> "$enkripsi".txt
 
 #mv $1 "$dekripsi".txt
 
-
+else echo "error"
+fi
