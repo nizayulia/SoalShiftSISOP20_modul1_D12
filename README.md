@@ -41,7 +41,7 @@ END {for (res in arr) printf res "\n" }
 ```
 awk -F "	" '
 ```
-- Mencari kata dari sebuah file hingga tab
+- Memisahkan "	" diantara kolom
 ```
 { if( $13 != "Region" ) arr[$13]+=$21;}
 ```
@@ -54,8 +54,8 @@ END {for (res in arr) printf res "\n" }
 ```
 ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | head -1
 ```
-- Sorting untuk nilai dari yang terkecil ke besar
-- Hanya menampilkan baris pertama
+- `sort -g` Sorting untuk nilai dari yang terkecil ke besar
+- `head -1` Hanya menampilkan baris pertama
 
 **b.** Menampilkan 2 negara bagian dengan profit paling sedikit berdasarkan hasil poin a
 
@@ -72,11 +72,11 @@ awk -F "	" '
 ```
 awk -F "	" '
 ```
-- Mencari kata dari sebuah file hingga tab
+- Memisahkan "	" diantara kolom
 ```
 { if ($13 == "Central" && $11!=State) arr[$11]+=$21;}
 ```
-- Menampilkan kolom ke 11 tanpa ada kata "State" dan yang memiliki kata "Central" pada kolom 13
+- Menampilkan kolom ke 11 yang memiliki "State" tidak sama dan yang memiliki kata "Central" pada kolom 13
 - Untuk kolom ke 11 yang memiliki kata sama, maka kolom pada 21 dijumlah
 ```
 END {for (res in arr) print arr[res] , res  }
@@ -85,8 +85,9 @@ END {for (res in arr) print arr[res] , res  }
 ```
 ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk '(NR <=2) {print $2}'
 ```
-- Sorting untuk nilai dari yang terkecil ke besar
-- Hanya menampilkan baris pertama dan kedua
+- `sort -g` Sorting untuk nilai dari yang terkecil ke besar
+- `(NR <=2)` Hanya menampilkan baris pertama dan kedua
+- `{print $2}` Hanya menampilkan kolom kedua
 
 **c.** menampilkan 10 product name dengan profit paling sedikit berdasarkan hasil poin a
 
@@ -105,13 +106,13 @@ awk -F "	" 'BEGIN { OFS= "\t"}
 ```
 awk -F "	" 'BEGIN { OFS= "\t"}
 ```
-- Mencari kata dari sebuah file hingga tab
-- OFS (Output field separator) dibangun dalam variabel untuk bahasa awk, secara default diatur ke ruang dan biasanya digunakan untuk memformat output file.
+- Memisahkan "	" diantara kolom
+- `OFS` (Output field separator) dibangun dalam variabel untuk bahasa awk, secara default diatur ke ruang dan biasanya digunakan untuk memformat output file.
 ```
 { if ($13 == "Central" && ( $11 == "Illinois" || "Texas" ) && $17 != "Product Name" )
   arr[$17]+=$21;}
 ```
-- Menampilkan kolom ke 17 tanpa ada kata "Product Name" dan yang memiliki kata "Central" pada kolom 13 dan kata "Illinois" atau "Texas" pada kolom ke 11
+- Menampilkan kolom ke 17 yang memiliki "Product Name" tidak sama dan yang memiliki kata "Central" pada kolom 13 dan kata "Illinois" atau "Texas" pada kolom ke 11
 - Untuk kolom ke 17 yang memiliki kata sama, maka kolom pada 21 dijumlah
 ```
 END {for (res in arr) print arr[res] , res }
@@ -120,9 +121,10 @@ END {for (res in arr) print arr[res] , res }
 ```
 ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk 'BEGIN {FS="\t"} (NR <=10) {print $2}'
 ```
-- Sorting untuk nilai dari yang terkecil ke besar
-- Hanya menampilkan baris pertama hingga ke sepuluh
-
+- `sort -g` Sorting untuk nilai dari yang terkecil ke besar
+- `(NR <=10)` Hanya menampilkan baris pertama hingga ke sepuluh
+- `{print $2}` Hanya menampilkan kolom kedua
+- `BEGIN {FS="\t"}` untuk pemisah hasil yang diprint
 ## #Soal 2
 ### Pertanyaan :
 
@@ -201,10 +203,13 @@ posisiakhirbesar=${besar[$waktu-1]}
 posisiakhirkecil=${kecil[$waktu-1]}
 ```
 - Menentukan pengubah huruf dari semula menjadi huruf setelahnya
+- `({A..Z})` `({a..z})` membuat array dari A-Z dan a-z
 ```
 random="$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c28)" || true
 ```
 - Menentukan random value
+- `'a-zA-Z0-9'` Hanya mengeluarkan alphanumeric
+- `/dev/urandom | head -c28` Hanya mengeluarkan 28 character
 ```
 enkripsi="$(echo "$file" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] | tr [a-z] ["$posisiawalkecil"-za-"$posisiakhirkecil"])"
 ```
@@ -251,7 +256,7 @@ wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
 - mendownload file yang terdapat di web dengan `wget`
 - `wget.log` untuk menyimpan file yang didownload
 - `-a` berfungsi untuk mengappend
-- `-o` berfungsi untuk mengubah nama file
+- `-O` berfungsi untuk mengubah nama file
 
 **b.** Setiap download dilakukan pada setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu
 
