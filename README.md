@@ -164,7 +164,9 @@ nama file bisa kembali.
 ```
 #!/bin/sh
 
-file="$(echo $* | awk -F "." '{print $1}')"
+in="$(echo $* | awk -F "." '{print $1}')"
+if [[ $in =~ ^[a-zA-Z]+$ ]]
+then
 
 waktu="$( date +"%H" )"
 
@@ -176,12 +178,15 @@ posisiakhirbesar=${besar[$waktu-1]}
 posisiakhirkecil=${kecil[$waktu-1]}
 
 random="$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c28)" || true
-enkripsi="$(echo "$file" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] | tr [a-z] ["$posisiawalkecil"-za-"$posisiakhirkecil"])"
-dekripsi="$(echo "$file" | tr ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] [A-Z] | tr ["$posisiawalkecil"-za-"$posisiakhirkecil" [a-z]])"
+enkripsi="$(echo "$in" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] | tr [a-z] ["$posisiawalkecil"-za-"$posisiakhirkecil"])"
+dekripsi="$(echo "$in" | tr ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] [A-Z] | tr ["$posisiawalkecil"-za-"$posisiakhirkecil" [a-z]])"
 
-printf "$random\n" >> "$enkripsi".txt
+printf $random $'\n' >> "$enkripsi".txt
 
-mv $1 "$dekripsi".txt
+#mv $1 "$dekripsi".txt
+
+else echo "error"
+fi
 ```
 - Jika ingin menjalankan enkripsi, maka codingan dekripsi dicomment dan juga sebaliknya.
 
@@ -190,6 +195,10 @@ mv $1 "$dekripsi".txt
 file="$(echo $* | awk -F "." '{print $1}')"
 ```
 - Mengambil nama file yang ingin diambil hingga titik
+```
+if [[ $in =~ ^[a-zA-Z]+$ ]]
+```
+- Hanya bisa input file character
 ```
 waktu="$( date +"%H" )"
 ```
