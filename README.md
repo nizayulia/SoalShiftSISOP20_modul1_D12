@@ -27,6 +27,8 @@ laporan tersebut.
 ### Jawaban :
 
 **a.** Menampilkan region dengan profit paling sedikit
+
+[code 1a](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal1/soal1_a.sh)
 ```
 #! bin/bash
 
@@ -56,6 +58,8 @@ END {for (res in arr) printf res "\n" }
 - Hanya menampilkan baris pertama
 
 **b.** Menampilkan 2 negara bagian dengan profit paling sedikit berdasarkan hasil poin a
+
+[code 1b](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal1/soal1_b.sh)
 ```
 #! bin/bash
 
@@ -85,6 +89,8 @@ END {for (res in arr) print arr[res] , res  }
 - Hanya menampilkan baris pertama dan kedua
 
 **c.** menampilkan 10 product name dengan profit paling sedikit berdasarkan hasil poin a
+
+[code 1c](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal1/soal1_c.sh)
 ```
 #! bin/bash
 
@@ -151,6 +157,8 @@ nama file bisa kembali.
 
 ### Jawaban :
 **a.** Total Codingan
+
+[code 2](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal2/soal2.sh)
 ```
 #!/bin/sh
 
@@ -224,20 +232,50 @@ b. setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu Karena gamb
 c. Maka dari itu buatlah sebuah script untuk mengidentifikasi gambar yang identik dari keseluruhan gambar yang terdownload tadi. Bila terindikasi sebagai gambar yang identik, maka sisakan 1 gambar dan pindahkan sisa file identik tersebut ke dalam folder ./duplicate dengan format filename "duplicate_nomor" (contoh : duplicate_200, duplicate_201). Setelah itu lakukan pemindahan semua gambar yang tersisa kedalam folder ./kenangan dengan format filename "kenangan_nomor" (contoh: kenangan_252, kenangan_253). Setelah tidak ada gambar di current directory, maka lakukan backup seluruh log menjadi ekstensi ".log.bak".
 
 ### Jawaban :
-**a.** apaan neh
+
+**a.** Mendownload file dengan syntax wget dan diubah nama filenya
+
+[code 3a](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal3/soal3_a.sh)
 ```
 #! bin/bash
 
 for ((i=1; i<=28; i=i+1))
 do 
-  wget -o "wget1.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"   
-  cat wget1.log >> wget2.log
+ wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
 done
 ```
-**b.** apaan juga neh
+#### penjelasan :
+```
+wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
+```
+- mendownload file yang terdapat di web dengan `wget`
+- `wget.log` untuk menyimpan file yang didownload
+- `-a` berfungsi untuk mengappend
+- `-o` berfungsi untuk mengubah nama file
+
+**b.** Setiap download dilakukan pada setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu
+
+[code 3b](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal3/soal3_b.txt)
 ```
 5 6-23/8 * * 0-5 bash /home/yulia/Documents/M1/Shift/no3/no3.sh
 ```
+#### penjelasan :
+```
+5 6-23/8 * * 0-5
+```
+- `5`      : menit ke 5
+- `6-23/8` : setiap 8 jam dari jam 06.00-23.00
+- `0-5`    : setiap hari kecuali hari sabtu
+
+**c.** Mengidentifikasi gambar yang sudah didownload, jika ada gambar yang duplicat, maka gambar tersebut dipindahkan ke dalam folder yang bernama duplicat
+
+- maaf mas mba belom nemu jawaban
+
+# Kendala
+
+- tidak paham syntax
+- syntax sukar dipahami
+- pokoknya syntax bingung
 
 # Materi :
 ## **AWK**
@@ -327,8 +365,62 @@ Dalam hal ini, `tr '[AZ]' '[X-ZA-W]'`, `tr` menerjemahkan semua kemunculan `'A'`
 
 `[X-ZA-W]` hanya berarti bahwa output Anda dimulai dengan huruf `X` dan berlanjut melalui huruf `Z`, kemudian dilanjutkan dengan huruf `A` hingga huruf `W`.
 
+## **WGET**
 
+`Wget` adalah pengunduh jaringan non-interaktif yang digunakan untuk mengunduh file dari server bahkan ketika pengguna belum masuk ke sistem dan dapat bekerja di latar belakang tanpa menghalangi proses saat ini.
 
+#### Option
+1. `-v` : untuk menampilkan versi wget yang tersedia di sistem Anda.
+#### Syntax
+```
+$wget -v
+```
+2. `-h` : untuk mencetak pesan bantuan yang menampilkan semua opsi perintah baris yang tersedia dengan opsi baris perintah wget
+#### Syntax
+```
+$wget -h [URL]
+```
+3. `-o` : untuk mengarahkan semua pesan yang dihasilkan oleh sistem ke file log yang ditentukan oleh opsi dan ketika proses selesai semua pesan yang dihasilkan tersedia dalam file log
+#### Syntax
+```
+$wget -o logfile [URL]
+```
+4. `-b` : untuk mengirim proses ke latar belakang segera setelah proses dimulai sehingga proses lain dapat dilakukan.
+#### Syntax
+```
+$wget -b [URL]
+```
+5. `-a` : untuk menambahkan pesan keluaran ke file log keluaran saat ini tanpa menimpa file
+#### Syntax
+```
+$wget -a logfile [URL]
+```
+6. `-i` : untuk membaca URL dari file.
+#### Syntax
+```
+$wget -i inputfile
+$wget -i inputfile [URL]
+```
+7. `-t` : untuk mengatur jumlah percobaan ulang ke beberapa kali yang ditentukan.
+#### Syntax
+```
+$wget -t number [URL]
+```
+8. `-c` :  untuk melanjutkan file yang diunduh sebagian
+#### Syntax
+```
+$wget -c [URL]
+```
+9. `-w` : untuk mengatur sistem untuk menunggu jumlah detik yang ditentukan di antara pengambilan
+#### Syntax
+```
+$wget -w number in seconds [URL]
+```
+10. `-r` : untuk mengaktifkan pengambilan rekursif dari tautan yang ditentukan jika terjadi kesalahan fatal juga.
+#### Syntax
+```
+$wget -r [URL]
+```
 
 # Refrensi
 - geeksforgeeks
