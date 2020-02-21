@@ -1,5 +1,8 @@
 #bagian a
-wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
+for ((i=1; i<=28; i=i+1))
+do 
+ wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
+done
 
 #bagian b
 5 6-23/8 * * 0-5 bash /home/yulia/Documents/M1/Shift/no3/no3.sh
