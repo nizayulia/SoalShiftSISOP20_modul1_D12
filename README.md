@@ -25,8 +25,33 @@ laporan tersebut.
 *Gunakan Awk dan Command pendukung
 
 ### Jawaban :
+```
+  #! bin/bash
+
+	a=$(awk -F "	" '
+	{ if( $13 != "Region" ) arr[$13]+=$21;}
+	END {for (res in arr) printf res "\n" }
+	' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | head -1 )
+	echo "$a"
+	
+	b=$(awk -F "	" -v a="$a" '
+	{ if ($13 == a && $11!=State) arr[$11]+=$21;}
+	END {for (res in arr)
+		print arr[res],res
+	     }
+       ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk '(NR <=2) {print $2}' ) 
+	echo "$b"
+
+	awk -F "	" 'BEGIN { OFS= "\t"}
+	{ if ($13 == "Central" && ( $11 == "Illinois" || "Texas" ) && $17 != "Product Name" )
+	 arr[$17]+=$21;}
+	END {for (res in arr) print arr[res] , res }
+       ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk 'BEGIN {FS="\t"} (NR <=10) {print $2}'
+```
+[code nomoe 1](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal1/soal1.sh)
 
 **a.** Menampilkan region dengan profit paling sedikit
+
 ```
 #! bin/bash
 
@@ -39,7 +64,7 @@ END {for (res in arr) printf res "\n" }
 ```
 awk -F "	" '
 ```
-- Mencari kata dari sebuah file hingga tab
+- Memisahkan "	" diantara kolom
 ```
 { if( $13 != "Region" ) arr[$13]+=$21;}
 ```
@@ -52,27 +77,30 @@ END {for (res in arr) printf res "\n" }
 ```
 ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | head -1
 ```
-- Sorting untuk nilai dari yang terkecil ke besar
-- Hanya menampilkan baris pertama
+- `sort -g` Sorting untuk nilai dari yang terkecil ke besar
+- `head -1` Hanya menampilkan baris pertama
 
 **b.** Menampilkan 2 negara bagian dengan profit paling sedikit berdasarkan hasil poin a
 ```
 #! bin/bash
 
-awk -F "	" '
-{ if ($13 == "Central" && $11!=State) arr[$11]+=$21;}
-	END {for (res in arr) print arr[res],res }
-' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk '(NR <=2) {print $2}'
+	b=$(awk -F "	" -v a="$a" '
+	{ if ($13 == a && $11!=State) arr[$11]+=$21;}
+	END {for (res in arr)
+		print arr[res],res
+	     }
+       ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk '(NR <=2) {print $2}' ) 
+	echo "$b"
 ```
 #### penjelasan :
 ```
 awk -F "	" '
 ```
-- Mencari kata dari sebuah file hingga tab
+- Memisahkan "	" diantara kolom
 ```
-{ if ($13 == "Central" && $11!=State) arr[$11]+=$21;}
+{ if ($13 == a && $11!=State) arr[$11]+=$21;}
 ```
-- Menampilkan kolom ke 11 tanpa ada kata "State" dan yang memiliki kata "Central" pada kolom 13
+- Menampilkan kolom ke 11 yang memiliki "State" tidak sama dan yang memiliki hasil kata sesuai poin a pada kolom 13
 - Untuk kolom ke 11 yang memiliki kata sama, maka kolom pada 21 dijumlah
 ```
 END {for (res in arr) print arr[res] , res  }
@@ -81,10 +109,11 @@ END {for (res in arr) print arr[res] , res  }
 ```
 ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk '(NR <=2) {print $2}'
 ```
-- Sorting untuk nilai dari yang terkecil ke besar
-- Hanya menampilkan baris pertama dan kedua
+- `sort -g` Sorting untuk nilai dari yang terkecil ke besar
+- `(NR <=2)` Hanya menampilkan baris pertama dan kedua
+- `{print $2}` Hanya menampilkan kolom kedua
 
-**c.** menampilkan 10 product name dengan profit paling sedikit berdasarkan hasil poin a
+**c.** menampilkan 10 product name dengan profit paling sedikit berdasarkan hasil poin b
 ```
 #! bin/bash
 
@@ -99,13 +128,13 @@ awk -F "	" 'BEGIN { OFS= "\t"}
 ```
 awk -F "	" 'BEGIN { OFS= "\t"}
 ```
-- Mencari kata dari sebuah file hingga tab
-- OFS (Output field separator) dibangun dalam variabel untuk bahasa awk, secara default diatur ke ruang dan biasanya digunakan untuk memformat output file.
+- Memisahkan "	" diantara kolom
+- `OFS` (Output field separator) dibangun dalam variabel untuk bahasa awk, secara default diatur ke ruang dan biasanya digunakan untuk memformat output file.
 ```
 { if ($13 == "Central" && ( $11 == "Illinois" || "Texas" ) && $17 != "Product Name" )
   arr[$17]+=$21;}
 ```
-- Menampilkan kolom ke 17 tanpa ada kata "Product Name" dan yang memiliki kata "Central" pada kolom 13 dan kata "Illinois" atau "Texas" pada kolom ke 11
+- Menampilkan kolom ke 17 yang memiliki "Product Name" tidak sama dan yang memiliki kata "Central" pada kolom 13 dan kata "Illinois" atau "Texas" pada kolom ke 11
 - Untuk kolom ke 17 yang memiliki kata sama, maka kolom pada 21 dijumlah
 ```
 END {for (res in arr) print arr[res] , res }
@@ -114,8 +143,10 @@ END {for (res in arr) print arr[res] , res }
 ```
 ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk 'BEGIN {FS="\t"} (NR <=10) {print $2}'
 ```
-- Sorting untuk nilai dari yang terkecil ke besar
-- Hanya menampilkan baris pertama hingga ke sepuluh
+- `sort -g` Sorting untuk nilai dari yang terkecil ke besar
+- `(NR <=10)` Hanya menampilkan baris pertama hingga ke sepuluh
+- `{print $2}` Hanya menampilkan kolom kedua
+- `BEGIN {FS="\t"}` untuk pemisah hasil yang diprint
 
 ## #Soal 2
 ### Pertanyaan :
@@ -150,11 +181,39 @@ nama file bisa kembali.
 *Gunakan Bash Script
 
 ### Jawaban :
-**a.** Total Codingan
+**a.** Membuat random value
+
+[code random value](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal2/soal2_Password.sh)
 ```
 #!/bin/sh
 
-file="$(echo $* | awk -F "." '{print $1}')"
+in="$(echo $* | awk -F " " '{print $1}')"
+
+random="$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c28)" || true
+
+printf "$random" >> "$in"
+```
+#### penjelasan :
+```
+in="$(echo $* | awk -F " " '{print $1}')"
+```
+- Mengambil nama file
+```
+random="$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c28)" || true
+```
+- Membuat nilai random
+- `'a-zA-Z0-9'` Hanya mengeluarkan alphanumeric
+- `/dev/urandom | head -c28` Hanya mengeluarkan 28 character
+
+**b.** Membuat Enkripsi
+
+[code enkripsi](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal2/soal2_Enkripsi.sh)
+```
+#!/bin/sh
+
+in="$(echo $* | awk -F "." '{print $1}')"
+if [[ $in =~ ^[a-zA-Z]+$ ]]
+then
 
 waktu="$( date +"%H" )"
 
@@ -165,21 +224,18 @@ posisiawalkecil=${kecil[$waktu]}
 posisiakhirbesar=${besar[$waktu-1]}
 posisiakhirkecil=${kecil[$waktu-1]}
 
-random="$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c28)" || true
-enkripsi="$(echo "$file" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] | tr [a-z] ["$posisiawalkecil"-za-"$posisiakhirkecil"])"
-dekripsi="$(echo "$file" | tr ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] [A-Z] | tr ["$posisiawalkecil"-za-"$posisiakhirkecil" [a-z]])"
+enkripsi="$(echo "$in" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] | tr [a-z] ["$posisiawalkecil"-za-"$posisiakhirkecil"])"
 
-printf "$random\n" >> "$enkripsi".txt
+printf " " >> "$enkripsi".txt
 
-mv $1 "$dekripsi".txt
+else echo "error"
+fi
 ```
-- Jika ingin menjalankan enkripsi, maka codingan dekripsi dicomment dan juga sebaliknya.
-
 #### penjelasan :
 ```
-file="$(echo $* | awk -F "." '{print $1}')"
+if [[ $in =~ ^[a-zA-Z]+$ ]]
 ```
-- Mengambil nama file yang ingin diambil hingga titik
+- `^[a-zA-Z]+$` Hanya bisa input character
 ```
 waktu="$( date +"%H" )"
 ```
@@ -193,22 +249,38 @@ posisiakhirbesar=${besar[$waktu-1]}
 posisiakhirkecil=${kecil[$waktu-1]}
 ```
 - Menentukan pengubah huruf dari semula menjadi huruf setelahnya
-```
-random="$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c28)" || true
-```
-- Menentukan random value
+- `({A..Z})` `({a..z})` membuat array dari A-Z dan a-z
 ```
 enkripsi="$(echo "$file" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] | tr [a-z] ["$posisiawalkecil"-za-"$posisiakhirkecil"])"
 ```
 - Menentukan enkripsi
+
+**b.** Membuat Dekripsi
+
+[code random value](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal2/soal2_Dekripsi.sh)
+```
+#!/bin/sh
+
+in="$(echo $* | awk -F "." '{print $1}')"
+
+waktu="$( date +"%H" )"
+
+besar=({A..Z})
+kecil=({a..z})
+posisiawalbesar=${besar[$waktu]}
+posisiawalkecil=${kecil[$waktu]}
+posisiakhirbesar=${besar[$waktu-1]}
+posisiakhirkecil=${kecil[$waktu-1]}
+
+dekripsi="$(echo "$in" | tr ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] [A-Z] | tr ["$posisiawalkecil"-za-"$posisiakhirkecil" [a-z]])"
+
+mv $1 "$dekripsi".txt
+```
+#### penjelasan :
 ```
 dekripsi="$(echo "$file" | tr ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] [A-Z] | tr ["$posisiawalkecil"-za-"$posisiakhirkecil" [a-z]])"
 ```
 - Menentukan dekripsi
-```
-printf "$random\n" >> "$enkripsi".txt
-```
-- Mengubah nama file dan mengisi random value
 ```
 mv $1 "$dekripsi".txt
 ```
@@ -224,20 +296,56 @@ b. setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu Karena gamb
 c. Maka dari itu buatlah sebuah script untuk mengidentifikasi gambar yang identik dari keseluruhan gambar yang terdownload tadi. Bila terindikasi sebagai gambar yang identik, maka sisakan 1 gambar dan pindahkan sisa file identik tersebut ke dalam folder ./duplicate dengan format filename "duplicate_nomor" (contoh : duplicate_200, duplicate_201). Setelah itu lakukan pemindahan semua gambar yang tersisa kedalam folder ./kenangan dengan format filename "kenangan_nomor" (contoh: kenangan_252, kenangan_253). Setelah tidak ada gambar di current directory, maka lakukan backup seluruh log menjadi ekstensi ".log.bak".
 
 ### Jawaban :
-**a.** apaan neh
-```
-#! bin/bash
 
-for ((i=1; i<=28; i=i+1))
-do 
-  wget -o "wget1.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"   
-  cat wget1.log >> wget2.log
-done
+**a.** Mendownload file dengan syntax wget dan diubah nama filenya
+
+[code 3a](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal3/soal3.sh)
 ```
-**b.** apaan juga neh
-```
+#bagian a
+wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
+
+#bagian b
 5 6-23/8 * * 0-5 bash /home/yulia/Documents/M1/Shift/no3/no3.sh
+
+#bagian c
+mkdir kenangan
+mkdir duplicate
+
+cat wget.log | grep Location: > location.log
+
+a=$(awk '{ a++
+	print a " " $2 }' location.log )
+echo "$a"
+
 ```
+#### penjelasan :
+```
+wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
+```
+- mendownload file yang terdapat di web dengan `wget`
+- `wget.log` untuk menyimpan file yang didownload
+- `-a` berfungsi untuk mengappend
+- `-O` berfungsi untuk mengubah nama file
+```
+5 6-23/8 * * 0-5
+```
+- `5`      : menit ke 5
+- `6-23/8` : setiap 8 jam dari jam 06.00-23.00
+- `0-5`    : setiap hari kecuali hari sabtu
+
+# Kendala
+#### No.1
+- Kendala : tidak tahu cara memasukkan hasil dari soal 1b ke 1c karena memiliki nilai lebih dari satu, untuk itu saya langsung memanggil hasil dari no1b ke no1c sebagai kondisi
+
+#### No.3 bagian c
+- hasil dari a dihitung apakah ada yang sama atau tidak, jika iya maka jumlahnya bertambah
+- jika jumlahnya lebih dari satu, maka file tersebut akan dipindahkan ke folder duplicate
+- jika jumlahnya tidak bertambah atau 1 maka file tersebut dipindahkan ke folder kenangan
+
+#### secara umum
+- tidak paham syntax
+- syntax sukar dipahami
+- pokoknya syntax bingung
 
 # Materi :
 ## **AWK**
@@ -327,8 +435,62 @@ Dalam hal ini, `tr '[AZ]' '[X-ZA-W]'`, `tr` menerjemahkan semua kemunculan `'A'`
 
 `[X-ZA-W]` hanya berarti bahwa output Anda dimulai dengan huruf `X` dan berlanjut melalui huruf `Z`, kemudian dilanjutkan dengan huruf `A` hingga huruf `W`.
 
+## **WGET**
 
+`Wget` adalah pengunduh jaringan non-interaktif yang digunakan untuk mengunduh file dari server bahkan ketika pengguna belum masuk ke sistem dan dapat bekerja di latar belakang tanpa menghalangi proses saat ini.
 
+#### Option
+1. `-v` : untuk menampilkan versi wget yang tersedia di sistem Anda.
+#### Syntax
+```
+$wget -v
+```
+2. `-h` : untuk mencetak pesan bantuan yang menampilkan semua opsi perintah baris yang tersedia dengan opsi baris perintah wget
+#### Syntax
+```
+$wget -h [URL]
+```
+3. `-o` : untuk mengarahkan semua pesan yang dihasilkan oleh sistem ke file log yang ditentukan oleh opsi dan ketika proses selesai semua pesan yang dihasilkan tersedia dalam file log
+#### Syntax
+```
+$wget -o logfile [URL]
+```
+4. `-b` : untuk mengirim proses ke latar belakang segera setelah proses dimulai sehingga proses lain dapat dilakukan.
+#### Syntax
+```
+$wget -b [URL]
+```
+5. `-a` : untuk menambahkan pesan keluaran ke file log keluaran saat ini tanpa menimpa file
+#### Syntax
+```
+$wget -a logfile [URL]
+```
+6. `-i` : untuk membaca URL dari file.
+#### Syntax
+```
+$wget -i inputfile
+$wget -i inputfile [URL]
+```
+7. `-t` : untuk mengatur jumlah percobaan ulang ke beberapa kali yang ditentukan.
+#### Syntax
+```
+$wget -t number [URL]
+```
+8. `-c` :  untuk melanjutkan file yang diunduh sebagian
+#### Syntax
+```
+$wget -c [URL]
+```
+9. `-w` : untuk mengatur sistem untuk menunggu jumlah detik yang ditentukan di antara pengambilan
+#### Syntax
+```
+$wget -w number in seconds [URL]
+```
+10. `-r` : untuk mengaktifkan pengambilan rekursif dari tautan yang ditentukan jika terjadi kesalahan fatal juga.
+#### Syntax
+```
+$wget -r [URL]
+```
 
 # Refrensi
 - geeksforgeeks

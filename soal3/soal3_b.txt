@@ -1,1 +1,0 @@
-5 6-23/8 * * 0-5 bash /home/yulia/Documents/M1/Shift/no3/no3.sh
