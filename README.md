@@ -48,7 +48,7 @@ laporan tersebut.
 	END {for (res in arr) print arr[res] , res }
        ' ~/Documents/M1/Shift/Sample-Superstore.tsv | sort -g | awk 'BEGIN {FS="\t"} (NR <=10) {print $2}'
 ```
-[code nomoe 1](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal1/soal1.sh)
+[code nomor 1](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal1/soal1.sh)
 
 **a.** Menampilkan region dengan profit paling sedikit
 
@@ -257,7 +257,7 @@ enkripsi="$(echo "$file" | tr [A-Z] ["$posisiawalbesar"-ZA-"$posisiakhirbesar"] 
 
 **b.** Membuat Dekripsi
 
-[code random value](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal2/soal2_Dekripsi.sh)
+[code Dekripsi](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal2/soal2_Dekripsi.sh)
 ```
 #!/bin/sh
 
@@ -296,10 +296,6 @@ b. setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu Karena gamb
 c. Maka dari itu buatlah sebuah script untuk mengidentifikasi gambar yang identik dari keseluruhan gambar yang terdownload tadi. Bila terindikasi sebagai gambar yang identik, maka sisakan 1 gambar dan pindahkan sisa file identik tersebut ke dalam folder ./duplicate dengan format filename "duplicate_nomor" (contoh : duplicate_200, duplicate_201). Setelah itu lakukan pemindahan semua gambar yang tersisa kedalam folder ./kenangan dengan format filename "kenangan_nomor" (contoh: kenangan_252, kenangan_253). Setelah tidak ada gambar di current directory, maka lakukan backup seluruh log menjadi ekstensi ".log.bak".
 
 ### Jawaban :
-
-**a.** Mendownload file dengan syntax wget dan diubah nama filenya
-
-[code 3a](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal3/soal3.sh)
 ```
 #bagian a
 wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
@@ -318,6 +314,7 @@ a=$(awk '{ a++
 echo "$a"
 
 ```
+[code Nomor 3](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal3/soal3.sh)
 #### penjelasan :
 ```
 wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
@@ -343,9 +340,7 @@ wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
 - jika jumlahnya tidak bertambah atau 1 maka file tersebut dipindahkan ke folder kenangan
 
 #### secara umum
-- tidak paham syntax
 - syntax sukar dipahami
-- pokoknya syntax bingung
 
 # Materi :
 ## **AWK**
