@@ -307,14 +307,30 @@ done
 5 6-23/8 * * 0-5 bash /home/yulia/Documents/M1/Shift/no3/no3.sh
 
 #bagian c
-mkdir kenangan
-mkdir duplicate
-
+mkdir -p duplicate kenangan
 cat wget.log | grep Location: > location.log
 
-a=$(awk '{ a++
-	print a " " $2 }' location.log )
-echo "$a"
+awk '{
+	a++
+	print a ";" $2
+}' location.log | 
+
+awk -F ';' '{
+	countt[$2]++
+	if (countt[$2] > 1) {
+		maka = "mv pdkt_kusuma_" $1 " duplicate/duplicate_" $1
+	} else {
+		maka = "mv pdkt_kusuma_" $1 " kenangan/kenangan_" $1
+	}
+	system(maka)
+}'
+
+cat location.log >> location.log.bak
+> location.log
+
+cat wget.log >> wget.log.bak
+> wget.log
+
 
 ```
 [code Nomor 3](https://github.com/Samsudhuha/SoalShiftSISOP20_modul1_D12/blob/master/soal3/soal3.sh)
@@ -332,6 +348,44 @@ wget -a "wget.log" https://loremflickr.com/320/240/cat -O "pdkt_kusuma_$i"
 - `5`      : menit ke 5
 - `6-23/8` : setiap 8 jam dari jam 06.00-23.00
 - `0-5`    : setiap hari kecuali hari sabtu
+
+```
+mkdir -p duplicate kenangan
+cat wget.log | grep Location: > location.log
+```
+- Untuk membuat direktori baru yaitu duplicate dan kenangan
+- Untuk membaca file pada `wget.log` lalu mendapatkan location: untuk ditambahkan ke file location.log
+
+```
+awk '{
+	a++
+	print a ";" $2
+}' location.log | 
+```
+- membuat awk untuk memberi nomor gambar sesuai urutan downloadnya dari file `location.log` yang dipisahkan dengan `;`
+
+```
+awk -F ';' '{
+	countt[$2]++
+	if (countt[$2] > 1) {
+		maka = "mv pdkt_kusuma_" $1 " duplicate/duplicate_" $1
+	} else {
+		maka = "mv pdkt_kusuma_" $1 " kenangan/kenangan_" $1
+	}
+	system(maka)
+}'
+```
+- membuat awk untuk menghitung jumlah file lalu memindahkan file yang identik lebih dari satu ke direktori duplicate dan memindahkan file sisanya ke direktori kenangan.
+
+```
+cat location.log >> location.log.bak
+> location.log
+
+cat wget.log >> wget.log.bak
+> wget.log
+```
+- Untuk membackup file pada location.log ke location.log.bak
+- Untuk membackup file pada wget.log ke wget.log.bak
 
 # Kendala
 #### No.1
