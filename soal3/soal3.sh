@@ -8,11 +8,26 @@ done
 5 6-23/8 * * 0-5 bash /home/yulia/Documents/M1/Shift/no3/no3.sh
 
 #bagian c
-mkdir kenangan
-mkdir duplicate
-
+mkdir -p duplicate kenangan
 cat wget.log | grep Location: > location.log
 
-a=$(awk '{ a++
-	print a " " $2 }' location.log )
-echo "$a"
+awk '{
+	a++
+	print a ";" $2
+}' location.log | 
+
+awk -F ';' '{
+	countt[$2]++
+	if (countt[$2] > 1) {
+		maka = "mv pdkt_kusuma_" $1 " duplicate/duplicate_" $1
+	} else {
+		maka = "mv pdkt_kusuma_" $1 " kenangan/kenangan_" $1
+	}
+	system(maka)
+}'
+
+cat location.log >> location.log.bak
+> location.log
+
+cat wget.log >> wget.log.bak
+> wget.log
